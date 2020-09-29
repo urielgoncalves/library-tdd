@@ -11,6 +11,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using TechLibrary.Common;
 using TechLibrary.Infrastructure;
 
 namespace TechLibrary
@@ -28,6 +29,8 @@ namespace TechLibrary
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+
+            services.AddTransient<IDateTime, MachineDateTime>();
 
             services.AddDbContext<LibraryContext>(options =>
                 options.UseSqlite("Data Source=library.db"));

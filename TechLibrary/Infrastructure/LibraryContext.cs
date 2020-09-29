@@ -2,36 +2,82 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
+using TechLibrary.Common;
 using TechLibrary.Domain.Entities;
 
 namespace TechLibrary.Infrastructure
 {
     public class LibraryContext : DbContext
     {
+        private readonly IDateTime _dateTime;
         public LibraryContext(DbContextOptions options) : base(options)
         {
 
+        }
+
+        public LibraryContext(DbContextOptions options, IDateTime datetime) : base(options)
+        {
+            _dateTime = datetime;
         }
         public DbSet<BookEntity> Books { get; set; }
         public DbSet<UserEntity> Users { get; set; }
         public DbSet<LoanEntity> Loan { get; set; }
 
-       // protected override void OnConfiguring(DbContextOptionsBuilder options) => options.UseSqlite("Data Source=library.db");
+        public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
+        {
+            foreach (var entry in ChangeTracker.Entries<EntityBase>())
+            {
+                switch (entry.State)
+                {
+                    case EntityState.Added:
+                        entry.Entity.CreatedAt = _dateTime.Now;
+                        break;
+                    case EntityState.Modified:
+                        
+                        break;
+                }
+            }
 
-        protected override void OnModelCreating(ModelBuilder builder) {
-            //builder.ApplyConfigurationsFromAssembly(typeof(LibraryContext).Assembly);
+            return base.SaveChangesAsync(cancellationToken);
+        }
 
-            //builder.Entity<BookEntity>().ToTable("Book")
-            //    .HasIndex(entity => new { entity.Id, entity.ISBN });
-            //builder.Entity<BookEntity>().HasKey(book => book.Id);
+        protected override void OnModelCreating(ModelBuilder builder) 
+        {
+            builder.Entity<BookEntity>().ToTable("Book")
+                .HasIndex(entity => new { entity.Id, entity.ISBN });
+            builder.Entity<BookEntity>().HasKey(book => book.Id);
 
-            //builder.Entity<UserEntity>().ToTable("User")
-            //    .HasIndex(entity => new { entity.Id, entity.Email });
-            //builder.Entity<UserEntity>().HasKey(user => user.Id);
+            builder.Entity<BookEntity>().HasData(
+                new BookEntity
+                {
+                    Id = 1,
+                    ISBN = "9781449331818",
+                    Title = "Learning JavaScript Design Patterns"
+                },
+                new BookEntity
+                {
+                    Id = 2,
+                    ISBN = "9781491950296",
+                    Title = "Programming JavaScript Applications"
+                });
 
-            //builder.Entity<LoanEntity>().ToTable("Loan")
-            //    .HasIndex(entity => new { entity.User, entity.Book });
+
+
+            builder.Entity<UserEntity>().ToTable("User")
+                .HasIndex(entity => new { entity.Id, entity.Email });
+
+            builder.Entity<UserEntity>().HasData(
+                new UserEntity
+                {
+                    Id = 1,
+                    Email = "test@test.com",
+                    Name = "User 1",
+                    Active = true
+                });
+
+            builder.Entity<UserEntity>().HasKey(user => user.Id);
         }
     }
 }

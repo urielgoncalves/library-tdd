@@ -9,8 +9,8 @@ using TechLibrary.Infrastructure;
 namespace TechLibrary.Infrastructure.Migrations
 {
     [DbContext(typeof(LibraryContext))]
-    [Migration("20200929200101_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20200929213041_Initial")]
+    partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -35,7 +35,25 @@ namespace TechLibrary.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Books");
+                    b.HasIndex("Id", "ISBN");
+
+                    b.ToTable("Book");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ISBN = "9781449331818",
+                            Title = "Learning JavaScript Design Patterns"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ISBN = "9781491950296",
+                            Title = "Programming JavaScript Applications"
+                        });
                 });
 
             modelBuilder.Entity("TechLibrary.Domain.Entities.LoanEntity", b =>
@@ -88,7 +106,19 @@ namespace TechLibrary.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Users");
+                    b.HasIndex("Id", "Email");
+
+                    b.ToTable("User");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Active = true,
+                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Email = "test@test.com",
+                            Name = "User 1"
+                        });
                 });
 
             modelBuilder.Entity("TechLibrary.Domain.Entities.LoanEntity", b =>

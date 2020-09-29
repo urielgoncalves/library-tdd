@@ -3,12 +3,12 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace TechLibrary.Infrastructure.Migrations
 {
-    public partial class InitialCreate : Migration
+    public partial class Initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Books",
+                name: "Book",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
@@ -19,11 +19,11 @@ namespace TechLibrary.Infrastructure.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Books", x => x.Id);
+                    table.PrimaryKey("PK_Book", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Users",
+                name: "User",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
@@ -35,7 +35,7 @@ namespace TechLibrary.Infrastructure.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Users", x => x.Id);
+                    table.PrimaryKey("PK_User", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -54,18 +54,38 @@ namespace TechLibrary.Infrastructure.Migrations
                 {
                     table.PrimaryKey("PK_Loan", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Loan_Books_BookId",
+                        name: "FK_Loan_Book_BookId",
                         column: x => x.BookId,
-                        principalTable: "Books",
+                        principalTable: "Book",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_Loan_Users_UserId",
+                        name: "FK_Loan_User_UserId",
                         column: x => x.UserId,
-                        principalTable: "Users",
+                        principalTable: "User",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
+
+            migrationBuilder.InsertData(
+                table: "Book",
+                columns: new[] { "Id", "CreatedAt", "ISBN", "Title" },
+                values: new object[] { 1, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "9781449331818", "Learning JavaScript Design Patterns" });
+
+            migrationBuilder.InsertData(
+                table: "Book",
+                columns: new[] { "Id", "CreatedAt", "ISBN", "Title" },
+                values: new object[] { 2, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "9781491950296", "Programming JavaScript Applications" });
+
+            migrationBuilder.InsertData(
+                table: "User",
+                columns: new[] { "Id", "Active", "CreatedAt", "Email", "Name" },
+                values: new object[] { 1, true, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "test@test.com", "User 1" });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Book_Id_ISBN",
+                table: "Book",
+                columns: new[] { "Id", "ISBN" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Loan_BookId",
@@ -76,6 +96,11 @@ namespace TechLibrary.Infrastructure.Migrations
                 name: "IX_Loan_UserId",
                 table: "Loan",
                 column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_User_Id_Email",
+                table: "User",
+                columns: new[] { "Id", "Email" });
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -84,10 +109,10 @@ namespace TechLibrary.Infrastructure.Migrations
                 name: "Loan");
 
             migrationBuilder.DropTable(
-                name: "Books");
+                name: "Book");
 
             migrationBuilder.DropTable(
-                name: "Users");
+                name: "User");
         }
     }
 }
