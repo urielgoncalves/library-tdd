@@ -11,9 +11,7 @@ namespace TechLibrary.Infrastructure.Migrations
                 name: "Book",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    CreatedAt = table.Column<DateTime>(nullable: false),
+                    Id = table.Column<Guid>(nullable: false),
                     Title = table.Column<string>(nullable: true),
                     ISBN = table.Column<string>(nullable: true)
                 },
@@ -26,9 +24,7 @@ namespace TechLibrary.Infrastructure.Migrations
                 name: "User",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    CreatedAt = table.Column<DateTime>(nullable: false),
+                    Id = table.Column<Guid>(nullable: false),
                     Name = table.Column<string>(nullable: true),
                     Email = table.Column<string>(nullable: true),
                     Active = table.Column<bool>(nullable: false)
@@ -42,12 +38,9 @@ namespace TechLibrary.Infrastructure.Migrations
                 name: "Loan",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    CreatedAt = table.Column<DateTime>(nullable: false),
-                    UserId = table.Column<int>(nullable: true),
-                    BookId = table.Column<int>(nullable: true),
-                    BorrowDate = table.Column<DateTime>(nullable: false),
+                    Id = table.Column<Guid>(nullable: false),
+                    UserId = table.Column<Guid>(nullable: false),
+                    BookId = table.Column<Guid>(nullable: false),
                     ReturnDate = table.Column<DateTime>(nullable: false)
                 },
                 constraints: table =>
@@ -58,29 +51,29 @@ namespace TechLibrary.Infrastructure.Migrations
                         column: x => x.BookId,
                         principalTable: "Book",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Loan_User_UserId",
                         column: x => x.UserId,
                         principalTable: "User",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.InsertData(
                 table: "Book",
-                columns: new[] { "Id", "CreatedAt", "ISBN", "Title" },
-                values: new object[] { 1, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "9781449331818", "Learning JavaScript Design Patterns" });
+                columns: new[] { "Id", "ISBN", "Title" },
+                values: new object[] { new Guid("340e1c1c-d88d-4c38-926c-6441164017fd"), "9781449331818", "Learning JavaScript Design Patterns" });
 
             migrationBuilder.InsertData(
                 table: "Book",
-                columns: new[] { "Id", "CreatedAt", "ISBN", "Title" },
-                values: new object[] { 2, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "9781491950296", "Programming JavaScript Applications" });
+                columns: new[] { "Id", "ISBN", "Title" },
+                values: new object[] { new Guid("d50a5fd3-c9b5-4b6e-9929-fc2d038689f7"), "9781491950296", "Programming JavaScript Applications" });
 
             migrationBuilder.InsertData(
                 table: "User",
-                columns: new[] { "Id", "Active", "CreatedAt", "Email", "Name" },
-                values: new object[] { 1, true, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "test@test.com", "User 1" });
+                columns: new[] { "Id", "Active", "Email", "Name" },
+                values: new object[] { new Guid("c222943c-53a1-47ad-a8db-5b8137f10f60"), true, "test@test.com", "User 1" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Book_Id_ISBN",

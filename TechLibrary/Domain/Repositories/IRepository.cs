@@ -7,7 +7,7 @@ namespace TechLibrary.Domain.Repositories
 {
     public interface IRepository<T>
     {
-        Task<T> Create(T entity);
+        Task<bool> Create(T entity);
 
         Task<IQueryable<T>> Read(int skip = 0, int take = 10);
 

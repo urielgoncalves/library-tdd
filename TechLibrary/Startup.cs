@@ -30,8 +30,6 @@ namespace TechLibrary
         {
             services.AddControllers();
 
-            services.AddTransient<IDateTime, MachineDateTime>();
-
             services.AddDbContext<LibraryContext>(options =>
                 options.UseSqlite("Data Source=library.db"));
         }

@@ -18,11 +18,8 @@ namespace TechLibrary.Infrastructure.Migrations
 
             modelBuilder.Entity("TechLibrary.Domain.Entities.BookEntity", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<DateTime>("CreatedAt")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("ISBN")
@@ -40,15 +37,13 @@ namespace TechLibrary.Infrastructure.Migrations
                     b.HasData(
                         new
                         {
-                            Id = 1,
-                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Id = new Guid("340e1c1c-d88d-4c38-926c-6441164017fd"),
                             ISBN = "9781449331818",
                             Title = "Learning JavaScript Design Patterns"
                         },
                         new
                         {
-                            Id = 2,
-                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Id = new Guid("d50a5fd3-c9b5-4b6e-9929-fc2d038689f7"),
                             ISBN = "9781491950296",
                             Title = "Programming JavaScript Applications"
                         });
@@ -56,24 +51,18 @@ namespace TechLibrary.Infrastructure.Migrations
 
             modelBuilder.Entity("TechLibrary.Domain.Entities.LoanEntity", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int?>("BookId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<DateTime>("BorrowDate")
                         .HasColumnType("TEXT");
 
-                    b.Property<DateTime>("CreatedAt")
+                    b.Property<Guid>("BookId")
                         .HasColumnType("TEXT");
 
                     b.Property<DateTime>("ReturnDate")
                         .HasColumnType("TEXT");
 
-                    b.Property<int?>("UserId")
-                        .HasColumnType("INTEGER");
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
@@ -86,15 +75,12 @@ namespace TechLibrary.Infrastructure.Migrations
 
             modelBuilder.Entity("TechLibrary.Domain.Entities.UserEntity", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("TEXT");
 
                     b.Property<bool>("Active")
                         .HasColumnType("INTEGER");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("TEXT");
 
                     b.Property<string>("Email")
                         .HasColumnType("TEXT");
@@ -111,9 +97,8 @@ namespace TechLibrary.Infrastructure.Migrations
                     b.HasData(
                         new
                         {
-                            Id = 1,
+                            Id = new Guid("c222943c-53a1-47ad-a8db-5b8137f10f60"),
                             Active = true,
-                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "test@test.com",
                             Name = "User 1"
                         });
@@ -123,11 +108,15 @@ namespace TechLibrary.Infrastructure.Migrations
                 {
                     b.HasOne("TechLibrary.Domain.Entities.BookEntity", "Book")
                         .WithMany("Loans")
-                        .HasForeignKey("BookId");
+                        .HasForeignKey("BookId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("TechLibrary.Domain.Entities.UserEntity", "User")
                         .WithMany("Loans")
-                        .HasForeignKey("UserId");
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

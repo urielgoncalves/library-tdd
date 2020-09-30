@@ -9,27 +9,27 @@ namespace TechLibrary.Infrastructure.Repositories
 {
     public class BookRepository : IBookRepository
     {
-        public Task<BookEntity> Create(BookEntity entity)
+        public async Task<bool> Create(BookEntity entity)
         {
             throw new NotImplementedException();
         }
 
-        public Task<BookEntity> Delete(Guid id)
+        public async Task<BookEntity> Delete(Guid id)
         {
             throw new NotImplementedException();
         }
 
-        public Task<IQueryable<BookEntity>> Read(int skip = 0, int take = 10)
+        public async Task<IQueryable<BookEntity>> Read(int skip = 0, int take = 10)
         {
             throw new NotImplementedException();
         }
 
-        public Task<BookEntity> Read(Guid id)
+        public async Task<BookEntity> Read(Guid id)
         {
             throw new NotImplementedException();
         }
 
-        public Task<BookEntity> Update(BookEntity entity)
+        public async Task<BookEntity> Update(BookEntity entity)
         {
             throw new NotImplementedException();
         }
