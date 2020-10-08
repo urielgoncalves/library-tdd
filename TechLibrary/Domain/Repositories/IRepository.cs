@@ -9,7 +9,8 @@ namespace TechLibrary.Domain.Repositories
     {
         Task<bool> Create(T entity);
 
-        Task<IQueryable<T>> Read(int skip = 0, int take = 10);
+        Task<IEnumerable<T>> Read(int skip = 0, int take = 10);
+        IQueryable<T> ReadAll();
 
         Task<T> Read(Guid id);
 

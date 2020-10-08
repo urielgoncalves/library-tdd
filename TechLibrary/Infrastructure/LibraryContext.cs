@@ -50,6 +50,11 @@ namespace TechLibrary.Infrastructure
                     ISBN = "9781449331818",
                     Title = "Learning JavaScript Design Patterns"
                 },
+                 new BookEntity
+                 {
+                     ISBN = "9781449331818",
+                     Title = "Learning JavaScript Design Patterns"
+                 },
                 new BookEntity
                 {
                     ISBN = "9781491950296",
